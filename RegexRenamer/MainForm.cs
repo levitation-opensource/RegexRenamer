@@ -1,6 +1,6 @@
 /* =============================================================================
  * RegexRenamer                                     Copyright (c) 2011 Xiperware
- * http://regexrenamer.sourceforge.net/                      xiperware@gmail.com
+ * https://github.com/Sukram21/RegexRenamer/                      sukram.mueller@gmail.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License v2, as published by the Free
@@ -733,7 +733,8 @@ namespace RegexRenamer
       inactiveFiles.Clear();
       icons.Clear();
 
-      DirectoryInfo activeDir = new DirectoryInfo( activePath );
+      //@"\\?\" prefix is needed for reading from long paths: https://stackoverflow.com/questions/44888844/directorynotfoundexception-when-using-long-paths-in-net-4-7
+      DirectoryInfo activeDir = new DirectoryInfo( @"\\?\" + activePath );
 
       if( RenameFolders )  // folders
       {
@@ -853,7 +854,7 @@ namespace RegexRenamer
 
         // add image (keyed by extension)
 
-#if !DEBUG
+#if !DEBUG || true  //Force condition to true: ignore icon load errors in debug mode too
         try  
         {
 #endif
@@ -880,7 +881,7 @@ namespace RegexRenamer
               dgvFiles.Rows[i].Cells[0].Value = icons[ext];
             }
           }
-#if !DEBUG
+#if !DEBUG || true  //Force condition to true: ignore icon load errors in debug mode too
         }
         catch  // default: no image
         {

@@ -740,6 +740,10 @@ namespace Furty.Windows.Forms
     private static extern IntPtr SHGetFileInfo( string pszPath, uint dwFileAttributes,
       out SHFILEINFO psfi, uint cbfileInfo, SHGFI uFlags );
 
+    private class NoIconException : Exception
+    { 
+    }
+
     public static Icon GetIcon( string strPath, bool selected )  // [xiperware]  , ImageList imageList)
     {
       SHFILEINFO info = new SHFILEINFO( true );
@@ -750,8 +754,16 @@ namespace Furty.Windows.Forms
       else
         flags = SHGFI.SHGFI_ICON | SHGFI.SHGFI_SMALLICON | SHGFI.SHGFI_OPENICON;
 
-      SHGetFileInfo( strPath, 256, out info, (uint)cbFileInfo, flags );
-      return Icon.FromHandle( info.hIcon );
+      string nonPrefixedStrPath = strPath;
+      if (strPath.Length >= 4 && strPath.Substring(0, 4) == @"\\?\")        //Only long paths will have this prefix for some reason. Also, some special folders have GUID-like paths which are not prefixed
+        nonPrefixedStrPath = strPath.Substring(4);    //Remove \\?\ prefix since SHGetFileInfo does not work with it for some reason.
+
+      SHGetFileInfo(nonPrefixedStrPath, 256, out info, (uint)cbFileInfo, flags );
+
+      if (info.hIcon.ToInt64() != 0)
+        return Icon.FromHandle( info.hIcon );
+      else 
+        throw new NoIconException();    //Use custom exception so that ArgumentException can be still kept enabled in debugger exceptions settings
     }
 
     public static Icon GetFolderIcon()  // [xiperware]
