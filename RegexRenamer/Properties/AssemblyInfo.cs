@@ -30,7 +30,14 @@ using System.Security;
 [assembly: AssemblyCopyright( "Copyright © 2011 Xiperware" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
-[assembly: AllowPartiallyTrustedCallers]
+/*comment-out to avoid System.TypeLoadException: 'Inheritance security rules violated while overriding member: ...' 
+
+and 
+
+System.MethodAccessException: 'Attempt by security transparent method 'Furty.Windows.Forms.ExtractIcons.GetDesktopIcon()' to access security critical method 'Furty.Windows.Forms.ExtractIcons.ExtractIconEx(System.String, Int32, IntPtr[], IntPtr[], UInt32)' failed.
+
+Assembly 'RegexRenamer, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null' is marked with the AllowPartiallyTrustedCallersAttribute, and uses the level 2 security transparency model.Level 2 transparency causes all methods in AllowPartiallyTrustedCallers assemblies to become security transparent by default, which may be the cause of this exception.'*/
+//[assembly: AllowPartiallyTrustedCallers]  
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -47,5 +54,5 @@ using System.Security;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion( "1.3.1.0" )]
-[assembly: AssemblyFileVersion( "1.3.1.0" )]
+[assembly: AssemblyVersion( "1.3.1.1" )]
+[assembly: AssemblyFileVersion( "1.3.1.1" )]
